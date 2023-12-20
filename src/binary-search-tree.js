@@ -44,7 +44,7 @@ class BinarySearchTree {
   }
 
   has(data) {
-    
+    return this.find(data) ? true : false;    
   }
 
   find(data) {
@@ -67,16 +67,58 @@ class BinarySearchTree {
     return current;
   }
 
+  _removeNode(node, data) {
+    if (!node) return null;
+
+    if (data < node.data) {
+      node.left = this._removeNode(node.left, data);
+      return node;
+    } else if (data > node.data) {
+      node.right = this._removeNode(node.right, data);
+      return node;
+    } else {
+      if (!node.left && !node.right) {
+        return null;
+      }
+      if (!node.left) {
+        node =  node.right;
+        return node;
+      }
+      if (!node.right) {
+        node = node.left;
+        return node;
+      }
+      let maxLeftData = this.max(node.left);
+      node.data = maxLeftData;
+      node.left = this._removeNode(node.left, maxLeftData);
+      return node;
+    }
+  }
+
   remove(data) {
-    
+    this.rootNode = this._removeNode(this.rootNode, data);
   }
 
-  min() {
-    
+  min(node = this.rootNode) {
+    if (!node) {
+      return;
+    }
+    let current = node;
+    while (current.left) {
+      current = current.left;
+    }
+    return current.data;
   }
 
-  max() {
-    
+  max(node = this.rootNode) {
+    if (!node) {
+      return;
+    }
+    let current = node;
+    while (current.right) {
+      current = current.right;
+    }
+    return current.data;
   }
 }
 
